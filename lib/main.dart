@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,32 +45,31 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title!)
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Consumer(
-            builder: (BuildContext context, WidgetRef ref, child){
-              print('test2');
-              return Text(
-                ref.watch(_mydataProvider).toString(),
-                style: TextStyle(fontSize: 100),
-              );
-            },
-          ),
-          Consumer(
-            builder: (context, ref, child){
-              
-              print('test1');
-              return Slider(
-                value: ref.watch(_mydataProvider),
-                onChanged: (value){
-                  ref.read(_mydataProvider.notifier).changState(value);
-                }
-              );
-            },
-          )
-        ]
-      ),
+      body: MyContents()
+    );
+  }
+}
+
+class MyContents extends HookConsumerWidget {
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _value = ref.watch(_mydataProvider);
+    
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          _value.toStringAsFixed(2),
+          style: TextStyle(fontSize: 100),
+        ),
+        Slider(
+          value: ref.read(_mydataProvider),
+          onChanged: (value){
+            ref.watch(_mydataProvider.notifier).changState(value);
+          }
+        )
+      ],
     );
   }
 }
