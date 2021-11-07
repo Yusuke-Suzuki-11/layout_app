@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:riverpod/riverpod.dart';
 
-class MyData extends ChangeNotifier{
-  double _value = 0.5;
+class MyData extends StateNotifier<double> {
+  MyData() : super(0.5);
+  void changState(newState) => this.state = newState;
   
-  double get value => _value;
-  
-  set value(double value){
-    _value = value;
-    notifyListeners();
+  double getState(){
+    return this.state;
   }
 }
